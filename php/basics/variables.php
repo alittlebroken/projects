@@ -20,7 +20,7 @@ $output_string_beat = " world!";
     </head>
     <body>
     
-      <h2>Variables</h2>
+      <h2>Variables - String & Strinf Concatination</h2>
       <hr>
       <?php
       
