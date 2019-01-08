@@ -30,6 +30,7 @@ $output_string_beat = " world!";
           echo "Third var contains: " . $output_string_beta . "<br>";
           echo "Second & third var: " . $output_string_alpha . $output_string_beta . "<br>";
           echo "Third & second var: " . $output_string_beta . " " . $output_string_alpha . "<br>";
+          echo "All together: $output_string, $output_string_alpha, $output_string_beta<br>";
       ?>
     
     </body>
