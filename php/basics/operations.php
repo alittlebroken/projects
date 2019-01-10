@@ -23,8 +23,11 @@ $int_num_ten = 10;
             echo "Math Operations<br>";
             echo "<hr>";
             echo "$int_num_one + $int_num_two = " . $int_num_one + $int_num_two . "<br>";
-            echo "$int_num_ten - $int_num_five - " . $int_num_ten - $int_num_five . "<br>";
-         
+            echo "$int_num_ten - $int_num_five = " . $int_num_ten - $int_num_five . "<br>";
+            echo "$int_num_10 / $int_num_one = " . $int_num_ten / $int_num_one . "<br>";
+            echo "$int_num_10 * $int_num_five = " . $int_num_10 * $int_num_five . "<br>";
+            echo "$int_num_10 % $int_num_five = " . $int_num_10 % $int_num_five . "<br>";
+            echo "$int_num_10 ** $int_num_five = " . $int_num_10 ** $int_num_five . "<br>";
         ?>
     </body>
 </html>
