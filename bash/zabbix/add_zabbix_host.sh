@@ -75,10 +75,13 @@ function auth_zabbix_server {
     
     RESULT=$(curl -d $JSON_REQUEST -H ZABBIX_API_CONTENT_TYPE -X POST $ZABBIX_API_URL)
 
+    debug_write "Result from Zabbix JSON Request: $RESULT"
+
     # Now retrieve the auth token from the result
     # We do have the silly double quotes at each end of the result
-    RESULT=$(echo $RESULT | cut -d',' -f2 | cut -d':' -f2)
+    ZABBIX_API_AUTH=$(echo $RESULT | cut -d',' -f2 | cut -d':' -f2)
 
+    debug_write "Zabbix Auth Token: $ZABBIX_API_AUTH"
 
 }
 
@@ -88,10 +91,8 @@ function auth_zabbix_server {
     if [[ script_runas == true ]]
     then
     
-      # Example curl usage as follows
-      # curl -d "insert_json_data_here" -X POST -H "Content-Type: application/json" $ZABBIX_API_URL
-      # or with json data file
-      # curl -d "@zabbix_auth.json" -X POST -H "Content-Type: application/json" $ZABBIX_API_URL
+      # Step 1: Authenticate against the zabbix json server
+      auth_zabbix_server
     
     else
         echo "You must run this script as the user $SCRIPT_USER only"
