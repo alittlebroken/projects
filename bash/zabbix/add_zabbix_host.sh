@@ -10,13 +10,13 @@
 DEBUG_MODE="ON"
 
 # Set the user that we should be running the script as
-SCRIPT_USER="ROOT"
+SCRIPT_USER="paul"
 
 # What address is the zabbix server on?
-ZABBIX_SERVER_ADDRESS="127.0.0.1\zabbix"
+ZABBIX_SERVER_ADDRESS="zabbix/zabbix"
 
 # What is the url we are going to post the API queries to
-ZABBIX_API_URL="http:\\$ZABBIX_SERVER_ADDRESS\api_jsonrpc.php"
+ZABBIX_API_URL='http://'"$ZABBIX_SERVER_ADDRESS"'/api_jsonrpc.php'
 
 # Set the content type
 ZABBIX_API_CONTENT_TYPE="Content-Type: application/json"
@@ -48,20 +48,6 @@ function debug_write
 
 }
 
-# Check if this script is being run as the designated user
-function script_runas
-{
-
-  # Check we are the designated user
-  if [[ "$USER" != "$SCRIPT_USER" ]]
-  then
-    return false
-  else
-    return true
-  fi
-
-}
-
 # This function authorizes you against the Zabbix server
 function auth_zabbix_server {
 
@@ -71,28 +57,33 @@ function auth_zabbix_server {
     
     JSON_REQUEST='{"jsonrpc":"2.0","method":"user.login","params":{"user":"'"$ZABBIX_API_UID"'","password":"'"$ZABBIX_API_PWD"'"},"id":'"$ZABBIX_API_ID"',"auth":null}'
     
+    debug_write "JSON REQUEST: $JSON_REQUEST"
+    
     debug_write "Sending request to Zabbix server"
     
-    RESULT=$(curl -d $JSON_REQUEST -H ZABBIX_API_CONTENT_TYPE -X POST $ZABBIX_API_URL)
+    debug_write "Content Type: $ZABBIX_API_CONTENT_TYPE"
+    
+    debug_write "Server: $ZABBIX_API_URL"
+    
+    RESULT=$(curl -s -d "$JSON_REQUEST" -H "$ZABBIX_API_CONTENT_TYPE" -X POST "$ZABBIX_API_URL")
 
     debug_write "Result from Zabbix JSON Request: $RESULT"
 
     # Now retrieve the auth token from the result
     # We do have the silly double quotes at each end of the result
     ZABBIX_API_AUTH=$(echo $RESULT | cut -d',' -f2 | cut -d':' -f2)
-
-    debug_write "Zabbix Auth Token: $ZABBIX_API_AUTH"
-
 }
 
 ## START SCRIPT
 
     # Ensure we are run as the specified user
-    if [[ script_runas == true ]]
+    if [[ "$USER" == "$SCRIPT_USER" ]]
     then
     
       # Step 1: Authenticate against the zabbix json server
       auth_zabbix_server
+      
+      debug_write "Authentication token: $ZABBIX_API_AUTH"
     
     else
         echo "You must run this script as the user $SCRIPT_USER only"
