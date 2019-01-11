@@ -11,9 +11,6 @@ DEBUG_MODE="ON"
 # Set the user that we should be running the script as
 SCRIPT_USER="root"
 
-# Set the loaction of the clamav log file to check
-CLAMAV_LOG_FILE="/var/log/clamav/freshclam.log"
-
 ## FUNCTIONS
 # Output debg messages to screen
 function debug_write
@@ -54,16 +51,18 @@ function script_runas
     fi
 
     # We have passed the user test we can now carry on with our usual scheduled programming
-    # Check that the log file we wish to check exists
-    if [[ -f "$CLAMAV_LOG_FILE ]]
-    then
     
-        
+    # Get the clamav version info
+    clamav_ver_info=$(clamscan -V | cut -d'/' -f3)
     
-    else
-        echo "The specified clamav log file does not exists at the location specified for this script. Please double check and try again"
-        exit 2
-    fi
+    # Extract out the date and time values we need
+    dt_year=$(echo $clamav_ver_info | cut -d' ' -f5)
+    dt_month=$(echo $clamav_ver_info | cut -d' ' -f2)
+    dt_day=$(echo $clamav_ver_info | cut -d' ' -f3)
 
+    # Build the date we need
+    dt_full="$dt_year-$dt_month-$dt_day"
+    
+   
 
 ## END SCRIPT
