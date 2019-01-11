@@ -58,6 +58,47 @@ function script_runas
     # Extract out the date and time values we need
     dt_year=$(echo $clamav_ver_info | cut -d' ' -f5)
     dt_month=$(echo $clamav_ver_info | cut -d' ' -f2)
+    
+        # We can't use the named month have to convert to digits first
+        case $dt_month in
+            "Jan")
+                dt_month="01"
+                ;;
+            "Feb")
+               dt_month="02"
+               ;;
+            "Mar")
+               dt_month="03"
+               ;;
+            "Apr")
+               dt_month="04"
+               ;;
+            "May")
+               dt_month="05"
+               ;;
+            "Jun")
+               dt_month="06"
+               ;;
+            "Jul")
+               dt_month="07"
+               ;;
+            "Aug")
+               dt_month="08"
+               ;;
+            "Sep")
+               dt_month="09"
+               ;;
+            "Oct")
+               dt_month="10"
+               ;;
+            "Nov")
+               dt_month="11"
+               ;;
+             "Dec")
+               dt_month="12"
+               ;;
+        esac
+    
     dt_day=$(echo $clamav_ver_info | cut -d' ' -f3)
 
     # Build the date we need
