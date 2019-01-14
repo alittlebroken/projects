@@ -104,6 +104,34 @@ function script_runas
     # Build the date we need
     dt_full="$dt_year-$dt_month-$dt_day"
     
-   
+    # Debug Information
+    debug_write "ClamAV Version Info: $clamav_ver_info"
+    debug_write "ClamAV year: $dt_year"
+    debug_write "ClamAV Month: $dt_month"
+    debug_write "ClamAV Day: $dt_day"
+    debug_write "Full date to compare with: $dt_full"
+
+    clam_av_epoch=$(date -d $dt_full +%s)
+    date_now_epoch=$(date -d "now" +%s)
+
+    debug_write "ClamAV date since epoch: $clam_av_epoch"
+    debug_write "Date Now since epoch: $date_now_epoch"
+
+    # work out the difference between now and when clamav was last updated
+    # divide by 86400 to get the differnece in days
+    date_diff=$(( (date_now_epoch-clam_av_epoch)/86400 ))
+
+    debug_write "Date difference in days: $date_diff"
+
+    # Check to see if the value is greater than 7 ( FAIL ) or between3 and 7 (WARN ) otherwise we pass the check
+    if [[ "$date_diff" -gt "7" ]]
+    then
+        echo "|$(date -d now)|FAIL|"
+    elif [[ "$date_diff" -gt "3" && "$date_diff" -lt "7" ]]
+    then
+       echo "|$(date -d now)|WARN|"
+    else
+       echo "|$(date -d now)|PASS|"
+    fi
 
 ## END SCRIPT
