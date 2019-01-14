@@ -21,6 +21,15 @@ $var_evening_cutoff = 9;
             
             echo "Curent time of day: " . $var_current_hour . "<br>";
             
+        if($var_current_hour < 12)
+        {
+            echo "Good morning."
+        }elseif($var_current_hour >=12 && $var_current_hour < 18)
+        {
+            echo "Good afternoon."
+        }else{
+            echo "Good evening."   
+        }
             
         ?>
 
