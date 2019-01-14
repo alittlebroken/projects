@@ -1,7 +1,7 @@
 
 # Basic plain Muffins
 
-This recipie will make 12 muffins
+This recipe will make 12 muffins
 
 ## Ingredients
 
@@ -24,3 +24,10 @@ This recipie will make 12 muffins
 * At this step you may add in any extra ingredients
 * Fill each hole in the muffinf tray about 2/3 full with batter
 * Once filled place into oven and cook for around 15 to 20 minutes or until golden brown
+
+## Improvements
+
+* Cook at a lower temperature for longer
+* Try using sweetener instead of sugar
+* Replace plain flower and baking powder with Self Raising flower
+* Try coconut milk instead of skimmed milk
