@@ -25,6 +25,21 @@ This recipe will make 12 muffins
 * Fill each hole in the muffinf tray about 2/3 full with batter
 * Once filled place into oven and cook for around 15 to 20 minutes or until golden brown
 
+## Fillings
+
+### Blueberry
+
+* add 100g blueberries to the batter during mixing
+
+### Blueberry & Lemon
+
+* add 100g blueberries and 1 small botle of lemon flavouring
+
+### Lemon & poppy seed
+
+* add 50g ( may need to revise ) of poppy seeds to mixture
+* add 1 small bottle of lemon flavouring to mixture
+
 ## Improvements
 
 * Cook at a lower temperature for longer
