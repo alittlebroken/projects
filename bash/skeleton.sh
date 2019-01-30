@@ -11,7 +11,17 @@ DEBUG_MODE="ON"
 # Set the user that we should be running the script as
 SCRIPT_USER="ROOT"
 
+# Set the tag to use when writing to syslog
+SYSLOG_TAG="tag_name"
+
 ## FUNCTIONS
+# Outputs messages to syslog
+function syslog_write
+{
+    # Put message in syslog, DUH
+    logger "$1" -t $SYSLOG_TAG
+}
+
 # Output debg messages to screen
 function debug_write
 {
