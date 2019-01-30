@@ -23,8 +23,22 @@ SPACE_THRESHOLD=1
 # Set the fielsystem we wish to monitor
 FS_TO_CHECK="/home"
 
+# Stores the result of checking the filesystem space
+# By Default set it to PASS
+FS_CHECK_RESULT="PASS"
+
 # Custom app name, use to pretify the log entries rather than using the actual script name
 APP_NAME="HTRAK Space Checker"
+
+# These set the names for the full config and the config to not capture traffic for htrak
+HTRAK_STOP_CONFIG="htrak.conf.no_monitors"
+HTRAK_START_CONFIG="htrak.conf.original"
+
+# What is the name of the config file that HTRAK actually uses
+HTRAK_CURR_CONFIG="/opt/htrak/conf/htrak.conf"
+
+# List the full path to the HTRAK config switcher script
+HTRAK_CONFIG_SWITCHER="/opt/htrak/bin/htrak_config_changer.sh"
 
 ## FUNCTIONS
 # Outputs messages to syslog
@@ -60,9 +74,53 @@ function script_runas
 
 }
 
+# Check to see if the filesystem has passed a threshold
+# Param $1 is filesystem size
+# Param $2 is fail threshold
+function check_threshold {
+
+    # Check if the current used space exceeds any thresholds
+    if [[ $1 -lt  $2 ]]
+    then
+        # Current space is below threshold set, lets set it as a failure
+        FS_CHECK_RESULT="FAIL"
+    fi
+    
+}
+
 ## START SCRIPT
 
 syslog_write "Starting $APP_NAME"
+
+    # Get the specified filesystems available space
+    CURR_SPACE=$(df -Ph $FS_TO_CHECK | tail -n 1 | tr -s '[:space:]' | cut -d' ' -f4)
+    
+    # Remove the last character from the current space car as we do not need it
+    CURR_SPACE=${CURR_SPACE%?}
+
+    # Check the filesystem space
+    check_threshold $CURR_SPACE $SPACE_THRESHOLD
+
+    # Check the result and determine if we need to take further action
+    if [[ $FS_CHECK_RESULT == "PASS" ]]
+    then
+        syslog_write "HTRAK has enough space to run. Nothing more to do"
+        
+        # Quick check to see if we have the "stop" config in place, if we do
+        # then we need to swap it back to the original now we have space
+        if grep -q "MonitoredServer 0.0.0.0 32 80" "$HTRAK_CURR_CONFIG"; then
+            syslog_write "Switching HTRAK back to using it's full config"
+            
+            # Source the script to switch the htrak config over
+            source "$HTRAK_CONFIG_SWITCHER  HTRAK_START_CONFIG"
+        fi
+        
+    else
+        syslog_write "Stopping HTRAK as we have exceeded the threshold of $SPACE_THRESHOLD GB"
+        
+        # Source the script to switch the htrak config over
+        source "$HTRAK_CONFIG_SWITCHER  HTRAK_STOP_CONFIG"
+    fi
 
 syslog_write "Stopping $APP_NAME"
 
