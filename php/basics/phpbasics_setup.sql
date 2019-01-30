@@ -18,3 +18,9 @@ create or replace table if not exists contacts(
     telephone_num varchar(20) not null,
     country_area_code int not null
 );
+
+# Create the user that the web app should connect in with
+create or replace user if not exists 'phpbasics'@'%' identified by 'phpbasics';
+
+# Grant specific privilages to that user
+grant SELECT,INSERT,DELETE,UPDATE on php_basics.contacts to 'phpbasics';
