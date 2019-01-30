@@ -20,6 +20,9 @@ SYSLOG_TAG="tag_name"
 # By default set to 1, as in GB
 SPACE_THRESHOLD=1
 
+# Set the fielsystem we wish to monitor
+FS_TO_CHECK="/home"
+
 # Custom app name, use to pretify the log entries rather than using the actual script name
 APP_NAME="HTRAK Space Checker"
 
