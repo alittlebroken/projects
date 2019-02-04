@@ -20,6 +20,16 @@
           }
           
         ?>
+        <br>
+        <h1> PHP DO While Loop </h1>
+        <?php
+        
+            do {
+                echo "The number in the do while loop is: " . $x . "<b4>";
+                $x++;
+            } while ($x < 10);
+        
+        ?>
     </body>
 </html>
 <?php
