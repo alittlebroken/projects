@@ -22,9 +22,10 @@
    *    a try catch block to catch any nasty exception we might encounter
    **/
    try{
-   
-   }catch(){
-   
+      $db_connection = new PDO("mysql:host=$db_host;dbname=$db_name",$db_uid,$db_pass); 
+   }catch(PDOException $e){
+      echo "An error was encountered whilst trying to connect to the database.<br>";
+      echo e$->getMessage();
    }
 
 ?>
