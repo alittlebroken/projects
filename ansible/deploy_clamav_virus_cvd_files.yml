@@ -1,0 +1,18 @@
+- hosts: local
+  tasks:
+
+   - name: 1. Remove existing main virus DB file
+     file:
+      path: /tmp/main.cvd
+      state: absent
+
+   - name: 2. Remove existing daily virus db file
+     file:
+      path: tmp/daily.cvd
+      state: absent
+
+   - name: 3. Download main virus DB file
+     local_action: get_url url=http://database.clamav.net/main.cvd dest=/tmp/main.cvd backup=no
+
+   - name: 4. Download daily virus db file
+     local_action: get_url url=http://database.clamav.net/daily.cvd dest=/tmp/daily.cvd backup=no
