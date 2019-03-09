@@ -18,5 +18,14 @@
      local_action: get_url url=http://database.clamav.net/daily.cvd dest=/tmp/daily.cvd backup=no
 
    - name: 5. Copy the Main virus DB file to the server
+     copy:
+       src: /tmp/main.cvd
+       dest: /usr/lib/clamav/main.cvd
+       backup: no
      
    - name: 6. Copy the Daily virus DB file to the server
+     copy:
+       src: /tmp/daily.cvd
+       dest: /usr/lib/clamav/daily.cvd
+       backup: no
+ 
