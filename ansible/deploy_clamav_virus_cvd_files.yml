@@ -8,7 +8,7 @@
 
    - name: 2. Remove existing daily virus db file
      file:
-      path: tmp/daily.cvd
+      path: /tmp/daily.cvd
       state: absent
 
    - name: 3. Download main virus DB file
