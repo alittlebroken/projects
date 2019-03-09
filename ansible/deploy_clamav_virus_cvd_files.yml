@@ -16,3 +16,7 @@
 
    - name: 4. Download daily virus db file
      local_action: get_url url=http://database.clamav.net/daily.cvd dest=/tmp/daily.cvd backup=no
+
+   - name: 5. Copy the Main virus DB file to the server
+     
+   - name: 6. Copy the Daily virus DB file to the server
