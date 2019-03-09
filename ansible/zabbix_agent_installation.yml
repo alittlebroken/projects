@@ -1,24 +1,18 @@
 ---
-   name: Installation of Zabbix Agent
-   hosts: local
-   
-   tasks:
-   - name: Test server connectvity
-     ping:
-   
-   - name: Copy across zabbix agent rpms
-       copy:
-          src: zabbix-agent-v4.rpm
-          dest: /tmp/zabbix-agent-v4.rpm
-          backup: yes
+ - hosts: local
+    vars:
+     remote_install_path: /etc/zabbix
+     psk_name: {{ ansible_facts['nodename'] }}
+    
+ - tasks:
+
+  - name: Copy across zabbix agent rpms
+     copy:
+      src: zabbix-agent-v4.rpm
+      dest: /tmp/zabbix-agent-v4.rpm
+      backup: no
           
-   - name: Install the Zabbix Agent
-       command: rpm -ivh zabbix-agent-v4.rpm
-       args:
-          chdir: /tmp
-  
-  - name: Copy across standard conf file
-      copy:
-         src: zabbix_agentd.conf
-         dest: /etc/zabbix/zabbix_agentd.conf
-         backup: yes
+  - name: Install the Zabbix Agent
+    command: rpm -ivh zabbix-agent-v4.rpm
+     args:
+      chdir: /tmp
