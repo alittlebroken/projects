@@ -29,3 +29,10 @@
        dest: /usr/lib/clamav/daily.cvd
        backup: no
  
+    - name: 7. Move the daily CVD file to its rightful home
+       command: mv /tmp/daily.cvd /var/lib/clamav/daily.cvd
+       backup: no
+       
+    - name: 8. Copy the main CVD file to its rightful home
+        command: mv /tmp/main.cvd /var/lib/clamav/daily.cvd
+        backup: no
