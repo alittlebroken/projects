@@ -21,18 +21,23 @@
      copy:
        src: /tmp/main.cvd
        dest: /usr/lib/clamav/main.cvd
+       user: clam
+       group: clam
        backup: no
      
    - name: 6. Copy the Daily virus DB file to the server
      copy:
        src: /tmp/daily.cvd
        dest: /usr/lib/clamav/daily.cvd
+       user: clam
+       group: clam
        backup: no
+
+   - name: 7. Run a virus scan of /tmp to ensure we are using the new definitions
+      command: clamscan /tmp
+      register: clamscan_results
  
-    - name: 7. Move the daily CVD file to its rightful home
-       command: mv /tmp/daily.cvd /var/lib/clamav/daily.cvd
-       backup: no
-       
-    - name: 8. Copy the main CVD file to its rightful home
-        command: mv /tmp/main.cvd /var/lib/clamav/daily.cvd
-        backup: no
+   - name: 8. Check results of clamscan
+     debug:
+       msg: '{{ clamscan_results }}'
+  
