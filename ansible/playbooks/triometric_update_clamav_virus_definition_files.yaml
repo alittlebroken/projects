@@ -1,0 +1,50 @@
+- hosts: orinoco
+  become: yes
+  vars_files:
+   - ~/ansible/vault_vars
+  vars:
+    ansible_become_pass: '{{ orinoco_sudo_pass }}'
+
+  tasks:
+
+   - name: 1. Remove existing main virus DB file
+     file:
+      path: /tmp/main.cvd
+      state: absent
+
+   - name: 2. Remove existing daily virus db file
+     file:
+      path: /tmp/daily.cvd
+      state: absent
+
+   - name: 3. Download main virus DB file
+     local_action: get_url url=http://database.clamav.net/main.cvd dest=/tmp/main.cvd backup=no
+
+   - name: 4. Download daily virus db file
+     local_action: get_url url=http://database.clamav.net/daily.cvd dest=/tmp/daily.cvd backup=no
+
+   - name: 5. Copy the Main virus DB file to the server
+     copy:
+       src: /tmp/main.cvd
+       dest: /var/lib/clamav/main.cvd
+       owner: clam
+       group: clam
+       mode: 0755
+       backup: no
+
+   - name: 6. Copy the Daily virus DB file to the server
+     copy:
+       src: /tmp/daily.cvd
+       dest: /var/lib/clamav/daily.cvd
+       owner: clam
+       group: clam
+       mode: 0755
+       backup: no
+
+   - name: 7. Perform a quick scan of /tmp to test virus DB is using new files
+     command: clamscan /tmp/
+     register: clamscan_results
+
+   - name: 8. Results of Virus Scan of /tmp
+     debug:
+      msg: '{{ clamscan_results }}'
