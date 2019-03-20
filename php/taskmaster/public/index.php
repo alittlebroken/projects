@@ -22,7 +22,7 @@
     /**
     * Now include the app clas file and create an instace of it
     **/
-    include("../apps/$application_name_Model.class.php");
+    include(APP_ROOT.DS."models".DS."$application_name_Model.class.php");
     $classname = $applicationName."Model";
     $application = new $classname($dbc);
     
