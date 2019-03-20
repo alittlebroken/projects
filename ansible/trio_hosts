@@ -1,3 +1,0 @@
-# Ansible Hosts File
-[local]
-localhosts ansible_connection=local ansible_ssh_user=trio_ansible ansible_ssh_key_file=/home/trio_ansible/.ssh/id_rsa
