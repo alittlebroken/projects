@@ -10,19 +10,24 @@
     **/
     define("APP_ROOT",dirname(__FILE__));
 
+   /**
+   * Define the directory seperatore to use for all paths
+   *//
+   define("DS","/");
+
     /**
     * Setup the database resource here and connect to it
     **/
-    include("/libraries/database.php")
+    include(APP_ROOT.DS."libraries".DS."database.php")
    
     /**
     * Setup the logging resource
     */
-    include("/libraries/logging.php");
+    include(APP_ROOT.DS."libraries".DS."logging.php");
     
     /**
     * Setup the template resource
     **/
-    include("/libraries/template.php");
+    include(APP_ROOT.DS."libraries".DS."template.php");
 
 ?>
