@@ -10,11 +10,20 @@
     **/
     switch($_GET["app"])
     {
-        case "tasks":
-            include("../models/tasks.php");
+        case "taskMaster":
+            $application_name = "taskMaster";
+            $application_action = $_GET["action"];
             break;
         default:
-            include("../models/default.php");
+            $application_name = "default";
+            $application_action = "Index";
     }
 
+    /**
+    * Now include the app clas file and create an instace of it
+    **/
+    include("../apps/$application_name_Model.class.php");
+    $classname = $applicationName."Model";
+    $application = new $classname($dbc);
+    
 ?>
