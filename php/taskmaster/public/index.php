@@ -22,8 +22,6 @@
     /**
     * Now include the app clas file and create an instace of it
     **/
-    include(APP_ROOT.DS."models".DS."$application_name_Model.class.php");
-    $classname = $applicationName."Model";
-    $application = new $classname($db_connection);
+    $application = new $application_name($db_connection);
     
 ?>
