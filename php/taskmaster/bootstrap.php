@@ -39,14 +39,6 @@
        {
            include(APP_ROOT.DS."models".DS.$classname.".model.php");
        }
-       elseif(file_exists(APP_ROOT.DS."views".DS.$classname.DS.$classname.".view.php"))
-       {
-           include(APP_ROOT.DS."views".DS.$classname.DS.$classname.".view.php");
-       }
-       elseif(file_exists(APP_ROOT.DS."views".DS.$classname.".view.php"))
-       {
-           include(APP_ROOT.DS."views".DS.$classname.".view.php");
-       }
        else(file_exists(APP_ROOT.DS."libraries".DS.$classname.".php"))
        {
            include(APP_ROOT.DS."libraries".DS.$classname.".php");
