@@ -43,7 +43,56 @@
           {
               $this->_tags[$key] = $value;
           }
-      
+         
+          /**
+          * Gets the header file
+          **/
+          private function getHeader()
+          {
+           
+             /**
+             * Look for the header file in the apps view folder, the amin view folder
+             * or just load the default
+             **/
+             if(file_exists(APP_ROOT.DS."views".DS.$this->_appName.DS.$this->_appName.".header.php"))
+             {
+                 include(APP_ROOT.DS."views".DS.$this->_appName.DS.$this->_appName.".header.php");
+             }
+             elseif(file_exists(APP_ROOT.DS."views".DS.$this->appName."header.php"))
+             {
+                 include(APP_ROOT.DS."views".DS.$this->appName."header.php");
+             }
+             else
+             {
+                 include(APP_ROOT.DS."views".DS."default.header.php");  
+             }
+             
+          }
+         
+         /**
+         * gets the footer file
+         **/
+         private function getFooter()
+         {
+          
+            /** 
+            * look for the foor file for the specified file
+            **/
+            if(file_exists(APP_ROOT.DS."views".DS.$this->appName.DS.$this->appName.".footer.php"))
+            {
+               include(APP_ROOT.DS."views".DS.$this->appName.DS.$this->appName.".footer.php");
+            }
+            elseif(file_exists(APP_ROOT.DS."views".DS.$this->appName."footer.php"))
+            {
+               include(APP_ROOT.DS."views".DS.$this->appName."footer.php");
+            }
+            else
+            {
+               include(APP_ROOT.DS."views".DS."default.footer.php");
+            }
+            
+         }
+         
       }
    
   ?>
