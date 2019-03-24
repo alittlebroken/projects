@@ -93,6 +93,42 @@
             
          }
          
+         /**
+         * Display the page
+         **/
+         public function display()
+         {
+          
+            /**
+            * Extract the page tags
+            **/
+            extract($this->_tags);
+            
+            /**
+            * Now load the main application action page
+            **/
+            if(file_exists(APP_ROOT.DS."views".DS.$this->appName.DS.$this->appAction.".view.php"))
+            {
+               $this->getHeader();
+               include(APP_ROOT.DS."views".DS.$this->appName.DS.$this->appAction.".view.php");
+               $this->getFooter();
+            }
+            elseif(APP_ROOT.DS."views".DS.$this->appName."_".$this->appAction.".view.php")
+            {
+               $this->getHeader();
+               include(APP_ROOT.DS."views".DS.$this->appName."_".$this->appAction.".view.php");
+               $this->getFooter();
+            }
+            else
+            {
+               $this->getHeader();
+               include(APP_ROOT.DS."views".DS."default.view.php";
+               $this->getFooter();
+            }
+            
+         }
+         
+         
       }
    
   ?>
