@@ -1,6 +1,6 @@
 <?php
     /**
-    *    name:        taskModel.php
+    *    name:        taskMaster.model.php
     *    Description: Model that handles the logic for the application to
     *                 work with the tasks module.
     *    author:      Paul Lockyer
