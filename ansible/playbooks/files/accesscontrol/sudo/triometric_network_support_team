@@ -1,0 +1,6 @@
+# Triometric Command Specification
+Cmnd_Alias TRIO_NET_BIN  = /sbin/service iptables *,/sbin/ifup *,/sbin/ifdown *,/usr/bin/iptraf *,/sbin/iptables *,/usr/sbin/tshark *
+
+# Triometric Sudo Access via groups
+# Network Support
+%trio_network_support               ALL = TRIO_NET_BIN

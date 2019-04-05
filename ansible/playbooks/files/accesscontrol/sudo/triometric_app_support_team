@@ -1,0 +1,7 @@
+Cmnd_Alias TRIO_APP_BIN = /sbin/service htracktl *, /sbin/service orafeedctl *, /sbin/service logloader *,/sbin/service tomcat *,/sbin/service jplaunchctl *, /sbin/service oracle *,/sbin/service oracle11g *,/sbin/service oracle11gEM *
+
+Cmnd_Alias TRIP_APP_ZABBIX = /sbin/service zabbix-agent *,/sbin/service zabbix-server *,/sbin/service httpd *,/sbin/service mysql *,/sbin/service mariadb *
+
+# Triometric Sudo Access via group
+# Application Support
+%trio_app_support        ALL         = TRIO_APP_BIN,TRIP_APP_ZABBIX

@@ -1,0 +1,9 @@
+Cmnd_Alias TRIO_USER_ADD = /usr/useradd *, /usr/bin/groupadd *
+
+Cmnd_Alias TRIO_USER_LOCK = /usr/sbin/usermod *, /usr/bin/passwd *
+
+Cmnd_Alias TRIO_USER_BAN = /usr/sbin/usermod root, /usr/bin/passwd root
+
+# Triometric Sudo Access via group
+# User/Group Support
+%trio_user_admin        ALL         = TRIO_USER_ADD,TRIO_USER_LOCK,!/usr/bin/passwd root,!/usr/sbin/usermod * root
