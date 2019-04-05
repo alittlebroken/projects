@@ -1,0 +1,94 @@
+---
+- hosts: localhost
+  gather_facts: True
+  become: yes
+  become_user: root
+
+  tasks:
+
+   # Note that currently we don't have an internal ansible controller
+   # so we cant run any commands that rely on our internal servers
+   # from customer controllers
+   # For now skip the retrieve from git and assume the files have been
+   # manually transferred for now
+   #
+   #- name: Get latest acl files from gitLab
+   #  git:
+   #    repo: 'http://git/mkimble/ts-tools.git'
+   #    dest: /tmp/
+   #
+   #- name: Get latest password scripts
+   # git:
+   #   repo: 'http://git/git/htrak.git'
+   #   dest: /tmp/
+   #
+   #- name: Copy acl files to server
+   #  synchronize:
+   #   src: /tmp/ts-tools/accesscontrol/
+   #   dest: /tmp/accesscontrol/
+   #
+   #- name: Copy latest user add script to remote server
+   #  copy:
+   #   src: /tmp/htrak/htrak/modules/security/user_account_policy/user-add.sh
+   #   dest: /tmp/user-add.sh
+
+   #- name: Get the oracle version installed
+   #  command: echo $ORACLE_HOME
+   #  check_mode: no
+   #  register: oracle_home_val
+
+   - debug:
+      msg: "{{ lookup('env','ORACLE_HOME') }}"
+
+   - name: Install lshell
+     yum:
+      name: /tmp/accesscontrol/lshell-0.9.14-2.el6.noarch.rpm
+      state: present
+
+   - name: Install secure password library
+     yum:
+      name: /tmp/accesscontrol/libpwquality-1.1.1-1.el6.x86_64.rpm
+      state: present
+
+   - name: Deploy lshell configuration ( Oracle 12 Only )
+     command: cp '/tmp/accesscontrol/lshell.conf.oracle12' '/etc/lshell.conf'
+      when: "{{ lookup('env','ORACLE_HOME') }}" == "/opt/oracle/database/product/12_1_0_2"
+     #args:
+     # removes: /opt/oracle/database/product/12_1_0_2
+
+   - name: Deploy lshell configuration ( Oracle 11 Only or No Oracle installed)
+     command: cp '/tmp/accesscontrol/lshell.conf.oracle11' '/etc/lshell.conf'
+      when: "{{ lookup('env','ORACLE_HOME') }}" != "/opt/oracle/database/product/12_1_0_2"
+     #args:
+     # creates: /opt/oracle/database/product/12_1_0_2
+
+   - name: Deploy sudo configuration
+     copy:
+      src: /tmp/accesscontrol/sudo/{{ item }}
+      dest: /etc/sudoers.d/
+     with_items:
+      - triometric_admin_support_team
+      - triometric_app_support_team
+      - triometric_network_support_team
+      - triometric_user_admin_team
+
+   - name: Create users via user-add.sh script
+      command: /tmp/user-add.sh -c /tmp/accesscontrol/ts_users.csv
+
+   #- name: Create users
+   #  user:
+   #   name: "{{ item.name }}"
+   #   comment: "{{ item.comment }}"
+   #   shell: "{{ item.shell }}"
+   #   append: yes
+   #   groups: "{{ item.groups }}"
+   #  with_items:
+   #   - { name: 'trio_plockyer', comment: 'Paul Lockyer - Triometric Technical Services Engineer', shell: '/usr/bin/lshell', groups: 'trio_app_support,trio_network_support,trio_user_admin'}
+   #   - { name: 'trio_plockyer_a', comment: 'Paul Lockyer - Triometric Technical Services Engineer - Admin', shell: '/bin/bash', groups: 'trio_admin' }
+   #   - { name: 'trio_tmacharla', comment: 'Trish Macharla - Triometric Technical Services Engineer', shell: '/usr/bin/lshell', groups: 'trio_app_support,trio_network_support,trio_user_admin'}
+   #   - { name: 'trio_tmacharla_a', comment: 'Trish Macharla - Triometric Technical Services Engineer - Admin', shell: '/bin/bash', groups: 'trio_admin' }
+   #   - { name: 'trio_mkimble', comment: 'Mike Kimble - Triometric Technical Services Engineer', shell: '/usr/bin/lshell', groups: 'trio_app_support,trio_network_support,trio_user_admin'}
+   #   - { name: 'trio_mkimble_a', comment: 'Mike Kimble - Triometric Technical Services Engineer - Admin', shell: '/bin/bash', groups: 'trio_admin' }
+   #   - { name: 'trio_olybek', comment: 'Oliver Lybek - Triometric Technical Services Engineer', shell: '/usr/bin/lshell', groups: 'trio_app_support,trio_network_support,trio_user_admin'}
+   #   - { name: 'trio_olybek_a', comment: 'Oliver Lybek - Triometric Technical Services Engineer - Admin', shell: '/bin/bash', groups: 'trio_admin' }
+
