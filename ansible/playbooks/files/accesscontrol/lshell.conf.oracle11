@@ -1,0 +1,114 @@
+# lshell.py configuration file
+#
+# $Id: lshell.conf,v 1.27 2010/10/18 19:05:17 ghantoos Exp $
+
+[global]
+##  log directory (default /var/log/lshell/ )
+logpath         : /var/log/lshell/
+##  set log level to 0, 1, 2, 3 or 4  (0: no logs, 1: least verbose,
+##                                                 4: log all commands)
+loglevel        : 2
+##  configure log file name (default is %u i.e. username.log)
+#logfilename     : %y%m%d-%u
+logfilename     : lshell
+#ogfilename     : messages
+
+##  in case you are using syslog, you can choose your logname
+#syslogname      : TrioACL
+
+[default]
+##  a list of the allowed commands or 'all' to allow all commands in user's PATH
+env_path        : ':/bin/:/sbin:/usr/bin/:/usr/sbin/:/usr/local:/opt/oracle/database/product/11_2_0_4/bin:/opt/oracle/database/product/11/bin:/etc/zabbix'
+allowed : ['ls','echo','cd','ll','pwd','whereis','less','zless','more','grep','egrep','zgrep','man','cat','zcat','sort','uniq','find','date','time','cut','screen','..','...','l.','alias']
+env_vars : {'ORACLE_HOME':'/opt/oracle/database/product/11_2_0_4','LD_LIBRARY_PATH':'/opt/oracle/database/product/11_2_0_4/lib32:/opt/oracle/database/product/11_2_0_4/lib','ORACLE_SID':'htraksid'}
+path : ['/opt/oracle/database/product/11_2_0_4','/opt/oracle/database/product/11/bin']
+
+##  a list of forbidden character or commands
+forbidden       : ['&', '`', '<', '$(', '${']
+
+##  a list of allowed command to use with sudo(8)
+#sudo_commands   : ['ls', 'more']
+
+##  number of warnings when user enters a forbidden value before getting
+##  exited from lshell, set to -1 to disable.
+warning_counter : 2
+
+##  command aliases list (similar to bash’s alias directive)
+#aliases          : {'ll':'ls -l', 'vi':'vim'}
+aliases         : {'ll':'ls -l --color=auto', 'vi':'vim', 'sqlplus':'rlwrap sqlplus', 'cp':'cp -i', 'chk':'/opt/triometric/bin/machine_check_job.sh', 'l.':'ls -d .* --color=auto', 'ls':'ls --color=auto', 'mc':'. /usr/libexec/mc/mc-wrapper.sh', 'mv':'mv -i', 'rm':'rm -i', 'which':'alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde', '..':'cd ..', '...':'cd ../..', 'dgmgrl':'rlwrap dgmgrl', 'rman':'rlwrap rman'}
+
+##  introduction text to print (when entering lshell)
+intro           : "== Triometric Restricted Shell ==\nWelcome user\nType '?' or 'help' to get the list of allowed commands\nFor further inforamtion or help contact Triometric Technical Services"
+
+##  configure your promt using %u or %h (default: username)
+prompt          : "%u@%h"
+
+##  a value in seconds for the session timer
+#timer           : 5
+
+##  list of path to restrict the user "geographicaly"
+#path            : ['/home/bla/','/etc']
+
+##  set the home folder of your user. If not specified the home_path is set to
+##  the $HOME environment variable
+#home_path       : '/home/%u/'
+
+##  update the environment variable $PATH of the user
+#env_path        : ':/usr/local/bin:/usr/sbin'
+
+##  add environment variables
+#env_vars        : {'foo':1, 'bar':'helloworld'}
+
+##  allow or forbid the use of scp (set to 1 or 0)
+#scp             : 1
+
+## forbid scp upload
+#scp_upload       : 0
+
+## forbid scp download
+#scp_download     : 0
+
+##  allow of forbid the use of sftp (set to 1 or 0)
+#sftp            : 1
+
+##  list of command allowed to execute over ssh (e.g. rsync, rdiff-backup, etc.)
+#overssh         : ['ls', 'rsync']
+
+##  logging strictness. If set to 1, any unknown command is considered as
+##  forbidden, and user's warning counter is decreased. If set to 0, command is
+##  considered as unknown, and user is only warned (i.e. *** unknown synthax)
+#strict          : 1
+
+##  force files sent through scp to a specific directory
+#scpforce        : '/home/bla/uploads/'
+
+##  history file maximum size
+#history_size     : 100
+
+##  set history file name (default is /home/%u/.lhistory)
+#history_file     : "/home/%u/.lshell_history"
+
+## Triometric Support Teams
+# Application Support Team
+[grp:trio_app_support]
+allowed : + ['service','tar','gunzip','gzip','sar','tail','rlwrap','sqlplus','dgmgrl','chk','mc','vi','su','groups','sudo','dmesg','ansible_playbook','ansible','tee','touch','rm','scp','ssh','df','chmod','chown','hostname','iostat','vmstat','watch','chk','dmidecode','id','mv','cp','xargs','mkdir','tr','wc','asciidoc','dos2unix','set','source','./run_logfile_check.tar.sh','./run_logfile_check_last_hour.sh','run_logfile_check_one_ob.sh']
+path    : + ['/opt/triometric','/opt/htrak','/var/log','/tmp','/etc/anisble']
+
+# Network support team
+[grp:trio_network_support]
+allowed : + ['ifconfig','ip','netstat','tcpdump','tshark','iptraf','iptables','route','telnet','traceroute','ping','arp','curl','wget','whois','finger','lsof','nmap','nslookup','ethtool','ifup','ifdown','groups','sudo','dmesg']
+path    : + ['/etc/sysconfig/network-scripts','/var/log']
+sudo_commands   : ['service','ifup','ifdown','iptraf','iptables','tshark']
+
+# User admin team
+[grp:trio_user_admin]
+sudo_commands     : ['useradd','groupadd','usermod','passwd','groups']
+
+# Read only
+[grp:trio_read_only]
+allowed : ['less','grep','cat','egrep','zgrep','more','dmesg','sar']
+path    : ['/var/log','/opt/htrak']
+
+# Tunneler
+[grp:trio_tunneler]
+allowed : ['ssh']
