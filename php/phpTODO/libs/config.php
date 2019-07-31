@@ -12,6 +12,6 @@
          'username' => 'phptodo',
          'password' => 'G34ThYre6739'
         ]
-    ];
+    ]; 
 
 ?>
