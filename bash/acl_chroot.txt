@@ -1,0 +1,96 @@
+SETUP:
+		* Setup chroot jail
+            
+			sudo mkdir -p /home/test
+			sudo mkdir -p /home/test/dev
+			
+			ls -l /dev/{null,zero,stdin,stdout,stderr,random,tty}
+				crw-rw-rw- 1 root root 1, 3 Jul 31 12:07 /dev/null
+				crw-rw-rw- 1 root root 1, 8 Jul 31 12:07 /dev/random
+				lrwxrwxrwx 1 root root   15 Jul 31 12:06 /dev/stderr -> /proc/self/fd/2
+				lrwxrwxrwx 1 root root   15 Jul 31 12:06 /dev/stdin -> /proc/self/fd/0
+				lrwxrwxrwx 1 root root   15 Jul 31 12:06 /dev/stdout -> /proc/self/fd/1
+				crw-rw-rw- 1 root tty  5, 0 Jul 31 12:07 /dev/tty
+				crw-rw-rw- 1 root root 1, 5 Jul 31 12:07 /dev/zero
+
+			cd /home/test/dev
+			sudo mknod -m 666 null c 1 3 
+			sudo mknod -m 666 tty c 5 0
+			sudo mknod -m 666 zero c 1 5
+			sudo mknod -m 666 random c 1 8
+			
+			sudo chown root:root /home/test
+			sudo chmod -R 0755 /home/test
+			sudo ls -ld /home/test
+			
+		* Create interactive shell
+		
+		    sudo mkdir -p /home/test/bin
+			sudo cp -v /bin/bash /home/test/bin
+			
+			sudo mkdir -p /home/test/lib64
+			sudo ldd /bin/bash 
+			sudo cp -v /lib64/{libtinfo.so.5,libdl.so.2,libc.so.6,ld-linux-x86-64.so.2} /home/test/lib64
+			
+			sudo mkdir /home/test/etc
+			sudo useradd -c "Triometric test user" trio_test
+			sudo passwd trio_test
+			cp -vf /etc/{passwd,group} /home/test/etc/
+			
+			NOTE: Each time a user is added the passwd and group files need to be copied across for the chroot jail to work for them
+			
+		* Configure SSH to allow use of the chroot jail
+		
+			sudo vi /etc/ssh/sshd_config
+			
+			--ADDED
+			# Triometric Jump Server CHROOT Jail
+			Match User trio_test
+			ChrootDirectory /home/test
+			
+			service sshd restart
+		
+       * Create home directories for the users
+	   
+	       sudo mkdir -p /home/test/home
+		   chmod 0755 /home/test/home
+		   sudo mkdir -p /home/test/home/trio_test
+		   sudo chown -R trio_test:trio_test /home/test/home/trio_test
+		   sudo chmod -R 0700 /home/test/home/trio_test
+		
+	   * Copy some basic commands for the users
+	   
+	     cp -v /bin/mkdir /home/test/bin/
+         cp -v /bin/date /home/test/bin/
+         cp -v /bin/ls /home/test/bin/
+
+		 chmod -R 755 /home/test/bin/{bash,date,ls,mkdir}
+		 
+		 ldd /bin/mkdir
+		 ldd /bin/date
+		 ldd /bin/ls
+		
+		 sudo cp -v /lib64/{libselinux.so.1,librt.so.1,libpthread.so.0,libcap.so.2,libacl.so.1,libattr.so.1} /home/test/lib64
+		
+		 chmod -R 755 /home/test/lib64/*
+		
+	   * Test it all works
+			
+		   ssh trio_test@192.168.119.142
+		   
+		   * Test bash built in commands - OK
+		   * Test we can't access non built in commands for bash
+		   
+				tcpdump				command not found
+				who					command not found
+				last				command not found
+				sudo				command not found
+		
+           * Test commands we added that are not built in
+
+                ls				OK
+                mkdir			OK
+                date			OK
+		
+	   * Issues
+	       * Unable to access directories outside of CHROOT ( /home/test )
