@@ -34,6 +34,27 @@ catch(PDOException $e){
   echo "<hr>";
 }
 
+/**
+* Get the list of tasks from the database
+*/
+$sql_tasks = "SELECT * from tasks";
+$stmt_tasks = $db_connection->prepare($sql_tasks);
+
+echo "<h2>Task List</h2>";
+echo "<hr>";
+echo "<table>";
+
+    while($row = $stmt_tasks->fetch())
+    {
+      echo "<tr>";
+      
+          echo "<td>".$row["task_name"]."</td>";
+      
+      echo "</tr>";
+    }
+
+echo "</table>";
+
 ?>
 
 <?php
