@@ -1,0 +1,36 @@
+## sensor_values
+sv_id
+sensor_type
+sensor_value
+sensor_value_type
+created
+channel_id
+owner
+
+## sensor_types
+st_id
+name
+created
+owner
+
+## sensor_value_types
+svt_id
+name
+created
+owner
+
+## channels
+cid
+hash_id
+name
+owner
+created
+
+## owners
+oid
+login
+password
+email
+last_logon
+verification_code
+
